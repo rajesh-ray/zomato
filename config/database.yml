@@ -25,7 +25,7 @@ development:
   <<: *default
   database: zomato_trial_week
   username: postgres
-  password: rdi182
+  password:
   host: localhost
 
   # The specified database role being used to connect to postgres.
@@ -85,5 +85,5 @@ production:
   <<: *default
   database: zomato_trial_week
   username: postgres
-  password: rdi182
+  password:
   host: localhost
