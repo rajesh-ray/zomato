@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 2019_06_18_155653) do
     t.string "name"
     t.string "phone", null: false
     t.integer "status", default: 0
-    t.geometry "location", limit: {:srid=>0, :type=>"st_point"}
-    t.geometry "coverage", limit: {:srid=>0, :type=>"geometry"}
+    t.geography "location", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "coverage", limit: {:srid=>4326, :type=>"st_polygon", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

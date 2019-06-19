@@ -42,17 +42,12 @@ module Api
 		end
 
 		def set_coordinates_from_lat_long (poly)
-	      	polygon = poly.strip
-	      	if /^([0-9]+(\.[0-9]+)?,[0-9]+(\.[0-9]+)?\s)+[0-9]+(\.[0-9]+)?,[0-9]+(\.[0-9]+)?$/.match(polygon).nil?
-	        	boundary_polygon = nil
-	      	else
-	        	polygon = polygon.split(" ")
-	        	polygon = polygon.map{|x|
-	          		FACTORY.point(x.split(',')[0].to_f.round(6), x.split(',')[1].to_f.round(6))
-	        	}
-	        	boundary_polygon = FACTORY.polygon(FACTORY.linear_ring(polygon))
-	        	boundary_polygon = FACTORY.project(boundary_polygon)
-	      	end
+	      	pol = poly.strip.split(" ")
+	       	pol = pol.map{|x|
+	           	FACTORY.point(x.split(',')[1].to_f.round(6), x.split(',')[0].to_f.round(6))
+	        }
+	        line = FACTORY.line_string(pol)
+	        boundary_polygon = FACTORY.polygon(line)
     		return boundary_polygon
   		end
 	end

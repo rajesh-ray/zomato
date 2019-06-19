@@ -13,6 +13,8 @@ gem 'activerecord-postgis-adapter'
 gem 'sidekiq'
 # Periodic jobs 
 gem "sidekiq-cron", "~> 1.1"
+# geojson
+gem 'rgeo-geojson'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
