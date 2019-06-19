@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_155653) do
   create_table "tasks", force: :cascade do |t|
     t.geometry "source", limit: {:srid=>0, :type=>"st_point"}, null: false
     t.geometry "destination", limit: {:srid=>0, :type=>"st_point"}, null: false
-    t.integer "status"
+    t.integer "status", default: 0
     t.integer "partner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

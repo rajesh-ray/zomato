@@ -24,6 +24,9 @@ module Api
 			task = Task.new(task_params.with_indifferent_access)
 			
 			if task.save
+				byebug
+				DeliveryTaskAssignmentWorker.perform_async(task.id)
+				byebug
 				render json: {status: 'SUCCESS', 'message': 'Task created', data: task}, status: :ok
 			else
 				render json: {status: 'FAILURE', 'message': 'Task not created', data: task.errors}, status: :unprocessable_entity

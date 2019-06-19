@@ -7,7 +7,12 @@ ruby '2.4.0'
 gem 'rails', '~> 5.2.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
+# RGeo to create postgis polygon and points
 gem 'activerecord-postgis-adapter'
+# Asynchronous workers 
+gem 'sidekiq'
+# Periodic jobs 
+gem "sidekiq-cron", "~> 1.1"
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets

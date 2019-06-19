@@ -3,7 +3,7 @@ class CreateTasks < ActiveRecord::Migration[5.2]
     create_table :tasks do |t|
       t.st_point :source, :null=>false
       t.st_point :destination, :null=>false
-      t.integer :status
+      t.integer :status, :default => 0
       t.integer :partner_id
       t.timestamps
     end

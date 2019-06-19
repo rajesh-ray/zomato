@@ -1,3 +1,7 @@
+require 'sidekiq/web'
+require 'sidekiq-cron'
+mount Sidekiq::Web => '/sidekiq'
+
 Rails.application.routes.draw do
 	root 'welcome#index'
 	namespace 'api' do
