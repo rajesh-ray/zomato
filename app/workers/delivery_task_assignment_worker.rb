@@ -15,8 +15,8 @@ class DeliveryTaskAssignmentWorker
 			destination = destination.as_text.scan(/[+-]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?/).collect{|s| s.to_f}
 			lon2 = destination[0]
 			lat2 = destination[1]
-
-			sql = "SELECT id FROM partners WHERE ST_DWithin(coverage, ST_Point(#{task.source.coordinates.join(',')}), 0) AND ST_DWithin(coverage, ST_Point(#{task.destination.coordinates.join(',')}), 0)"
+			byebug
+			sql = "SELECT id FROM partners WHERE ST_DWithin(coverage, ST_Point(#{task.source.coordinates.join(',')}), 0) AND ST_DWithin(coverage, ST_Point(#{task.destination.coordinates.join(',')}), 0) AND status = 1"
 			partners_serveable = ActiveRecord::Base.connection.execute(sql)
 			partner_ids = partners_serveable.as_json.map{|hsh|hsh["id"]}
 		

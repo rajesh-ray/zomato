@@ -1,4 +1,4 @@
-partner_location_updater:
+partner_location_update:
   cron: "* * * * *"
   class: "PartnerLocationUpdateWorker"
   queue: partner
