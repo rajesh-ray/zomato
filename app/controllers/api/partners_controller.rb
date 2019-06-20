@@ -17,8 +17,8 @@ module Api
 		def create
 			partner_params, missing_params = check_and_create_params
 			byebug
-			if missing_params.include? true
-				render json: {status: 'FAILURE', 'message': 'Please provide required params'}, status: :bad_request and return
+			if missing_params.present? || partner_params['coverage'].nil?
+				render json: {status: 'FAILURE', 'message': 'Please provide required valid params'}, status: :bad_request and return
 			end
 
 			partner = Partner.new(partner_params.with_indifferent_access)
@@ -43,11 +43,12 @@ module Api
 
 		def set_coordinates_from_lat_long (poly)
 	      	pol = poly.strip.split(" ")
+	      	return nil if pol.size() < 3
 	       	pol = pol.map{|x|
 	           	FACTORY.point(x.split(',')[1].to_f.round(6), x.split(',')[0].to_f.round(6))
 	        }
-	        line = FACTORY.line_string(pol)
-	        boundary_polygon = FACTORY.polygon(line)
+	        line = FACTORY.line_string(pol) rescue nil
+	        boundary_polygon = FACTORY.polygon(line) rescue nil
     		return boundary_polygon
   		end
 	end

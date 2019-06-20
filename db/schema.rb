@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_18_155653) do
+ActiveRecord::Schema.define(version: 2019_06_20_163230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_155653) do
     t.geography "coverage", limit: {:srid=>4326, :type=>"st_polygon", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["coverage"], name: "index_partners_on_coverage", using: :gist
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 2019_06_18_155653) do
     t.integer "partner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["partner_id", "status"], name: "partner_id_status_composite_index", unique: true
   end
 
 end
