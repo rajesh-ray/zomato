@@ -32,7 +32,6 @@ module Api
 
 		def update
 			if params[:id]
-				byebug
 				task = Task.find(params[:id]) rescue nil
 				if task.nil?
 					render json: {status: 'FAILURE', 'message': 'Task id does not exist'}, status: :bad_request and return
@@ -45,8 +44,8 @@ module Api
 					end
 					task.status = (params['status']) ? params['status'] : task.status
 					task.partner_id = (params['partner_id']) ? params['partner_id'] : task.partner_id
-					byebug
 					if task.save
+						byebug
 						if task.status == 0
 							DeliveryTaskAssignmentWorker.perform_async(task.id)
 						end

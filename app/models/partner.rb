@@ -32,7 +32,7 @@ class Partner < ApplicationRecord
 	def get_transformed_point(id, location, coverage)
 		possible_azimuth = [0.0, 90.0, 180.0, 270.0]
 		direction = possible_azimuth.sample(1)[0]
-		query = "SELECT ST_AsText(ST_Project('#{location}'::geography, 1000, radians(#{direction}))) AS transformed_point"
+		query = "SELECT ST_AsText(ST_Project('#{location}'::geography, 500, radians(#{direction}))) AS transformed_point"
 		record = ActiveRecord::Base.connection.execute(query)
 		point = record.first['transformed_point'].scan(/[+-]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?/).collect{|s| s.to_f.round(6)}
 		sql = "SELECT ST_DWithin(coverage, ST_Point(#{point[0]}, #{point[1]}), 0) AS moveable FROM partners WHERE id=#{id}"

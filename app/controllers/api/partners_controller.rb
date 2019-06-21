@@ -16,7 +16,6 @@ module Api
 
 		def create
 			partner_params, missing_params = check_and_create_params
-			byebug
 			if missing_params.present? || partner_params['coverage'].nil?
 				render json: {status: 'FAILURE', 'message': 'Please provide required valid params'}, status: :bad_request and return
 			end
@@ -39,7 +38,6 @@ module Api
 	          		partner.name = (params['name']) ? params['name'] : partner.name
 	          		partner.phone = (params['phone']) ? params['phone'] : partner.phone
 	          		partner.status = (params['status']) ? params['status'] : partner.status
-	          		byebug
 	          		if params['location_lat'] and params['location_long']
 	            		partner.location = set_coordinates_from_lat_long(params['location_lat'], params['location_long'])
 	          		end
