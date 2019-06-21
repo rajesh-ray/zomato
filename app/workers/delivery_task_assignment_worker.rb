@@ -6,6 +6,8 @@ class DeliveryTaskAssignmentWorker
 
 	def perform(task_id)
 		task = Task.find(task_id)
+		task.status = 1
+		task.save
 		source = task.source
 		destination = task.destination
 		if task.status != 2
@@ -19,10 +21,10 @@ class DeliveryTaskAssignmentWorker
 			sql = "SELECT id FROM partners WHERE ST_DWithin(coverage, ST_Point(#{task.source.coordinates.join(',')}), 0) AND ST_DWithin(coverage, ST_Point(#{task.destination.coordinates.join(',')}), 0) AND status = 1"
 			partners_serveable = ActiveRecord::Base.connection.execute(sql)
 			partner_ids = partners_serveable.as_json.map{|hsh|hsh["id"]}
-		
 			if partners_serveable.count != 0
 				sql = "SELECT id, name, ST_Distance(location, ST_GeographyFromText('SRID=4326;POINT(#{lon1} #{lat1})')) AS distance FROM partners WHERE id IN (#{partner_ids.join(',')}) ORDER BY distance"
 				records_array = ActiveRecord::Base.connection.execute(sql)
+				log_file.info("Available partners: #{records_array.as_json}")
 				if records_array.count > 0
 					task.partner_id = records_array.first['id']
 					task.status = 2
@@ -48,5 +50,9 @@ class DeliveryTaskAssignmentWorker
       a = (Math.sin(dlat_rad/2))**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * (Math.sin(dlon_rad/2))**2
       c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a))
       return (METERS_PER_UNIT_CHANGE * c).round(2)
+    end
+
+    def log_file
+    	@log = Logger.new("#{Rails.root}/log/partner_assignment.log") 
     end
 end

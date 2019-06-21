@@ -30,6 +30,40 @@ module Api
 			end
 		end
 
+		def update
+			if params[:id]
+				byebug
+				task = Task.find(params[:id]) rescue nil
+				if task.nil?
+					render json: {status: 'FAILURE', 'message': 'Task id does not exist'}, status: :bad_request and return
+				else
+					if params['source_lat'] and params['source_long']
+						task.source = set_coordinates_from_lat_long(params['source_lat'], params['source_long'])
+					end
+					if params['destination_lat'] and params['destination_long']
+						task.destination= set_coordinates_from_lat_long(params['destination_lat'], params['destination_long'])
+					end
+					task.status = (params['status']) ? params['status'] : task.status
+					task.partner_id = (params['partner_id']) ? params['partner_id'] : task.partner_id
+					byebug
+					if task.save
+						if task.status == 0
+							DeliveryTaskAssignmentWorker.perform_async(task.id)
+						end
+						render json: {status: 'SUCCESS', 'message': 'Task updated', data: task}, status: :ok
+					else
+						render json: {status: 'FAILURE', 'message': 'Task not updated', data: task.errors}, status: :unprocessable_entity
+					end
+				end
+			else
+				render json: {status: 'FAILURE', 'message': 'Task id param not specified'}, status: :bad_request and return
+			end
+		end
+
+		def destroy
+
+		end
+
 		private
 
 		def check_and_create_params

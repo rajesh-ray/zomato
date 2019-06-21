@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2019_06_20_163230) do
     t.integer "partner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["partner_id", "status"], name: "partner_id_status_composite_index", unique: true
+    t.index ["partner_id", "updated_at"], name: "partner_id_updated_at_composite_index", unique: true
   end
 
 end
